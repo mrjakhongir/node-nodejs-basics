@@ -1,5 +1,15 @@
+import fs from "fs";
+
 const create = async () => {
-    // Write your code here 
+  fs.readFile("fresh.txt", (err, data) => {
+    if (data) {
+      throw new Error("FS operation failed");
+    } else {
+      fs.writeFile("fresh.txt", "I am fresh and young", (err) => {
+        if (err) console.log(err);
+      });
+    }
+  });
 };
 
 await create();
