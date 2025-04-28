@@ -1,15 +1,18 @@
-import fs from "fs";
+import { promises as fs } from "fs";
+import { join } from "path";
 
 const create = async () => {
-  fs.readFile("fresh.txt", (err, data) => {
-    if (data) {
-      throw new Error("FS operation failed");
+  const path = join("files", "fresh.txt");
+  try {
+    await fs.access(path);
+    throw new Error("FS operation failed");
+  } catch (err) {
+    if (err.code === "ENOENT") {
+      await fs.writeFile(path, "I am fresh and young");
     } else {
-      fs.writeFile("fresh.txt", "I am fresh and young", (err) => {
-        if (err) console.log(err);
-      });
+      throw new Error("FS operation failed");
     }
-  });
+  }
 };
 
 await create();
